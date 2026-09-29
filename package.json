@@ -2,10 +2,12 @@
   "name": "codeboxbootcamp2026",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
+  "main": "backend/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "dev": "nodemon backend/server.js",
+    "build:frontend": "npm --prefix frontend run build"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,14 @@
   "bugs": {
     "url": "https://github.com/Scoutkp/CodeboxBootcamp2026/issues"
   },
-  "homepage": "https://github.com/Scoutkp/CodeboxBootcamp2026#readme"
+  "homepage": "https://github.com/Scoutkp/CodeboxBootcamp2026#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "google-auth-library": "^11.1.0",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
