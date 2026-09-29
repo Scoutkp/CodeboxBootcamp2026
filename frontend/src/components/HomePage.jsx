@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
+import { clearStoredUser, getStoredUser } from '../auth/session';
 
 export default function HomePage() {
-  const user = JSON.parse(sessionStorage.getItem('user') || 'null');
+  const user = getStoredUser();
   const isLoggedIn = Boolean(user);
 
   function signOut() {
-    sessionStorage.removeItem('user');
+    clearStoredUser();
     window.location.replace('/login');
   }
 

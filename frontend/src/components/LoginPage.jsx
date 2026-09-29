@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { getStoredUser, storeUser } from '../auth/session';
 
 const initialForm = { username: '', password: '', passwordConfirmation: '' };
 
@@ -10,7 +11,7 @@ export default function LoginPage() {
   const isLogin = mode === 'login';
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const googleButtonRef = useRef(null);
-  const isLoggedIn = Boolean(sessionStorage.getItem('user'));
+  const isLoggedIn = Boolean(getStoredUser());
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -29,7 +30,7 @@ export default function LoginPage() {
     const response = await fetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
     const result = await response.json(); setLoading(false);
     if (!response.ok) { setError(result.error); return; }
-    sessionStorage.setItem('user', JSON.stringify(result.user)); window.location.href = '/home';
+    storeUser(result.user); window.location.href = '/home';
   }
 
   function toggleMode() { setMode(isLogin ? 'register' : 'login'); setForm(initialForm); setError(''); }
@@ -52,7 +53,7 @@ export default function LoginPage() {
     const response = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
     const result = await response.json(); setLoading(false);
     if (!response.ok) { setError(result.error); return; }
-    sessionStorage.setItem('user', JSON.stringify(result.user)); window.location.href = '/home';
+    storeUser(result.user); window.location.href = '/home';
   }
 
   return (
