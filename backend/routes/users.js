@@ -49,17 +49,20 @@ async function googleLogin(req, res, next) {
     const { credential } = req.body || {};
     if (!credential) return res.status(401).json({ error: 'Google credential is required' });
 
-    const ticket = await googleClient.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    let ticket;
+    try {
+      ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+    } catch (verificationError) {
+      return res.status(401).json({ error: 'Invalid Google credential' });
+    }
+
     const payload = ticket.getPayload();
     const user = await userService.findOrCreateGoogleUser(payload);
     res.status(200).json({ user });
   } catch (error) {
-    if (error.message?.includes('Token used too late') || error.message?.includes('Wrong number of segments')) {
-      return res.status(401).json({ error: 'Invalid Google credential' });
-    }
     next(error);
   }
 }
