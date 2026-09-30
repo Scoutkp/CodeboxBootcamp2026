@@ -24,3 +24,5 @@ create table if not exists public.recipes (
 );
 
 create index if not exists recipes_user_id_idx on public.recipes (user_id);
+
+alter table public.recipes enable row level security;
