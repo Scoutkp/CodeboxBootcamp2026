@@ -5,7 +5,7 @@
   "private": true,
   "main": "backend/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
     "dev": "nodemon backend/server.js",
     "build:frontend": "npm --prefix frontend run build",
     "start": "npm run build:frontend && npm run dev"
@@ -26,9 +26,11 @@
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
     "google-auth-library": "^11.1.0",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "supertest": "^7.3.0"
   }
 }

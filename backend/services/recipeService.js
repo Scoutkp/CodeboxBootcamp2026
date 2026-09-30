@@ -1,5 +1,17 @@
 const pool = require('../db/pool');
 
+const MAX_RECIPE_TEXT_LENGTH = 20000;
+
+function validateRecipeInput(recipe) {
+  if (!recipe || typeof recipe !== 'object' || Array.isArray(recipe)) return 'Recipe body must be an object';
+  for (const field of ['title', 'ingredients', 'instructions']) {
+    if (recipe[field] !== undefined && (typeof recipe[field] !== 'string' || recipe[field].length > MAX_RECIPE_TEXT_LENGTH)) {
+      return `${field} must be a string under ${MAX_RECIPE_TEXT_LENGTH} characters`;
+    }
+  }
+  return null;
+}
+
 function publicRecipe(recipe) {
   return {
     id: Number(recipe.id),
@@ -47,4 +59,4 @@ async function deleteRecipe(userId, recipeId) {
   return result.rowCount > 0;
 }
 
-module.exports = { listRecipesForUser, createRecipe, updateRecipe, deleteRecipe };
+module.exports = { listRecipesForUser, createRecipe, updateRecipe, deleteRecipe, validateRecipeInput };

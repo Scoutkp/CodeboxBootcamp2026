@@ -23,4 +23,8 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => console.log(`CodeBox server listening at http://localhost:${PORT}/app`));
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`CodeBox server listening at http://localhost:${PORT}/app`));
+}
+
+module.exports = app;
