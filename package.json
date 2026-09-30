@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node --test",
     "dev": "nodemon backend/server.js",
-    "build:frontend": "npm ci --prefix frontend && npm --prefix frontend run build",
+    "build:frontend": "npm ci && npm ci --prefix frontend && npm --prefix frontend run build",
     "start": "npm run build:frontend && npm run dev"
   },
   "repository": {
