@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { getStoredUser, storeUser } from '../auth/session';
+import { apiFetch } from '../api/client';
 
 const initialForm = { username: '', password: '', passwordConfirmation: '' };
 
@@ -28,7 +29,7 @@ export default function LoginPage() {
   async function submit(event) {
     event.preventDefault(); setError(''); setLoading(true);
     try {
-      const response = await fetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      const response = await apiFetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
       const result = await response.json();
       if (!response.ok) { setError(result.error); return; }
       storeUser(result.user); window.location.href = '/home';
@@ -54,7 +55,7 @@ export default function LoginPage() {
   async function handleGoogleCredential({ credential }) {
     setError(''); setLoading(true);
     try {
-      const response = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
+      const response = await apiFetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
       const result = await response.json();
       if (!response.ok) { setError(result.error); return; }
       storeUser(result.user); window.location.href = '/home';
