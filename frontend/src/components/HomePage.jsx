@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { clearStoredUser, getStoredUser } from '../auth/session';
 import RecipeCard from './RecipeCard';
+import { apiFetch } from '../api/client';
 
 const emptyRecipe = { title: '', ingredients: '', instructions: '' };
 
@@ -17,7 +18,7 @@ export default function HomePage() {
       window.location.replace('/login');
       return;
     }
-    fetch(`/api/users/${user.id}/recipes`)
+    apiFetch(`/api/users/${user.id}/recipes`)
       .then(async (response) => {
         if (!response.ok) throw new Error('Could not load your recipes.');
         return response.json();
@@ -28,7 +29,7 @@ export default function HomePage() {
   }, [isLoggedIn, user?.id]);
 
   function signOut() {
-    fetch('/api/logout', { method: 'POST' }).catch(() => {});
+    apiFetch('/api/logout', { method: 'POST' }).catch(() => {});
     clearStoredUser();
     window.location.replace('/login');
   }
@@ -36,7 +37,7 @@ export default function HomePage() {
   async function addRecipe() {
     try {
       setError('');
-      const response = await fetch(`/api/users/${user.id}/recipes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(emptyRecipe) });
+      const response = await apiFetch(`/api/users/${user.id}/recipes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(emptyRecipe) });
       if (!response.ok) { setError('Could not add a recipe.'); return; }
       const recipe = await response.json();
       setRecipes((current) => [...current, recipe]);
@@ -46,7 +47,7 @@ export default function HomePage() {
 
   async function saveRecipe(id, recipe) {
     try {
-      const response = await fetch(`/api/users/${user.id}/recipes/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(recipe) });
+      const response = await apiFetch(`/api/users/${user.id}/recipes/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(recipe) });
       if (!response.ok) { setError('Could not save that recipe.'); return; }
       const saved = await response.json();
       setRecipes((current) => current.map((item) => item.id === id ? saved : item));
@@ -57,7 +58,7 @@ export default function HomePage() {
     const name = recipe.title.trim() || 'this recipe';
     if (!window.confirm(`Delete ${name}?`)) return;
     try {
-      const response = await fetch(`/api/users/${user.id}/recipes/${recipe.id}`, { method: 'DELETE' });
+      const response = await apiFetch(`/api/users/${user.id}/recipes/${recipe.id}`, { method: 'DELETE' });
       if (!response.ok) { setError('Could not delete that recipe.'); return; }
       setRecipes((current) => current.filter((item) => item.id !== recipe.id));
     } catch { setError('Could not connect to the server.'); }

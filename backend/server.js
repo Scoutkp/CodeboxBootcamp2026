@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const usersRouter = require('./routes/users');
 const recipesRouter = require('./routes/recipes');
@@ -8,6 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+if (process.env.FRONTEND_URL) {
+  app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+}
 app.use('/api', usersRouter);
 app.use('/api', recipesRouter);
 

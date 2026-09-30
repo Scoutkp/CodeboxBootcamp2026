@@ -33,11 +33,14 @@ function signToken(userId) {
 
 function setAuthCookie(res, userId) {
   const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-  res.setHeader('Set-Cookie', `auth_token=${encodeURIComponent(signToken(userId))}; HttpOnly; SameSite=Lax; Path=/; Max-Age=900${secure}`);
+  const sameSite = process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
+  res.setHeader('Set-Cookie', `auth_token=${encodeURIComponent(signToken(userId))}; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=900${secure}`);
 }
 
 function clearAuthCookie(res) {
-  res.setHeader('Set-Cookie', 'auth_token=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0');
+  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+  const sameSite = process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
+  res.setHeader('Set-Cookie', `auth_token=; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=0${secure}`);
 }
 
 module.exports = { authenticate, setAuthCookie, clearAuthCookie, signToken };

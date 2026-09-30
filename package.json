@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Scoutkp/CodeboxBootcamp2026#readme",
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
     "google-auth-library": "^11.1.0",
