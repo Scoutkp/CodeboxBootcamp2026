@@ -27,10 +27,13 @@ export default function LoginPage() {
 
   async function submit(event) {
     event.preventDefault(); setError(''); setLoading(true);
-    const response = await fetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
-    const result = await response.json(); setLoading(false);
-    if (!response.ok) { setError(result.error); return; }
-    storeUser(result.user); window.location.href = '/home';
+    try {
+      const response = await fetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      const result = await response.json();
+      if (!response.ok) { setError(result.error); return; }
+      storeUser(result.user); window.location.href = '/home';
+    } catch { setError('Could not connect to the server.'); }
+    finally { setLoading(false); }
   }
 
   function toggleMode() { setMode(isLogin ? 'register' : 'login'); setForm(initialForm); setError(''); }
@@ -50,10 +53,13 @@ export default function LoginPage() {
 
   async function handleGoogleCredential({ credential }) {
     setError(''); setLoading(true);
-    const response = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
-    const result = await response.json(); setLoading(false);
-    if (!response.ok) { setError(result.error); return; }
-    storeUser(result.user); window.location.href = '/home';
+    try {
+      const response = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
+      const result = await response.json();
+      if (!response.ok) { setError(result.error); return; }
+      storeUser(result.user); window.location.href = '/home';
+    } catch { setError('Could not connect to the server.'); }
+    finally { setLoading(false); }
   }
 
   return (

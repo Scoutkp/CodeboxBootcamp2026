@@ -28,39 +28,40 @@ export default function HomePage() {
   }, [isLoggedIn, user?.id]);
 
   function signOut() {
+    fetch('/api/logout', { method: 'POST' }).catch(() => {});
     clearStoredUser();
     window.location.replace('/login');
   }
 
   async function addRecipe() {
-    setError('');
-    const response = await fetch(`/api/users/${user.id}/recipes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(emptyRecipe) });
-    if (!response.ok) { setError('Could not add a recipe.'); return; }
-    const recipe = await response.json();
-    setRecipes((current) => [...current, recipe]);
-    setNewRecipeId(recipe.id);
+    try {
+      setError('');
+      const response = await fetch(`/api/users/${user.id}/recipes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(emptyRecipe) });
+      if (!response.ok) { setError('Could not add a recipe.'); return; }
+      const recipe = await response.json();
+      setRecipes((current) => [...current, recipe]);
+      setNewRecipeId(recipe.id);
+    } catch { setError('Could not connect to the server.'); }
   }
 
   async function saveRecipe(id, recipe) {
-    const response = await fetch(`/api/users/${user.id}/recipes/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(recipe) });
-    if (!response.ok) { setError('Could not save that recipe.'); return; }
-    const saved = await response.json();
-    setRecipes((current) => current.map((item) => item.id === id ? saved : item));
+    try {
+      const response = await fetch(`/api/users/${user.id}/recipes/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(recipe) });
+      if (!response.ok) { setError('Could not save that recipe.'); return; }
+      const saved = await response.json();
+      setRecipes((current) => current.map((item) => item.id === id ? saved : item));
+    } catch { setError('Could not connect to the server.'); }
   }
 
   async function deleteRecipe(recipe) {
     const name = recipe.title.trim() || 'this recipe';
     if (!window.confirm(`Delete ${name}?`)) return;
-    const response = await fetch(`/api/users/${user.id}/recipes/${recipe.id}`, { method: 'DELETE' });
-    if (!response.ok) { setError('Could not delete that recipe.'); return; }
-    setRecipes((current) => current.filter((item) => item.id !== recipe.id));
+    try {
+      const response = await fetch(`/api/users/${user.id}/recipes/${recipe.id}`, { method: 'DELETE' });
+      if (!response.ok) { setError('Could not delete that recipe.'); return; }
+      setRecipes((current) => current.filter((item) => item.id !== recipe.id));
+    } catch { setError('Could not connect to the server.'); }
   }
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      window.location.replace('/login');
-    }
-  }, [isLoggedIn]);
 
   if (!isLoggedIn) return null;
 

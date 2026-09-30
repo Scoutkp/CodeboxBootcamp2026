@@ -8,11 +8,15 @@ const fields = [
 export default function RecipeCard({ recipe, onSave, onDelete, autoFocus }) {
   const [draft, setDraft] = useState(recipe);
   const titleRef = useRef(null);
+  const saveQueue = useRef(Promise.resolve());
   useEffect(() => setDraft(recipe), [recipe]);
   useEffect(() => { if (autoFocus) titleRef.current?.focus(); }, [autoFocus]);
   function changeField(field, value) { setDraft((current) => ({ ...current, [field]: value })); }
   function saveField(field) {
-    if (draft[field] !== recipe[field]) onSave(recipe.id, { ...draft, [field]: draft[field] });
+    if (draft[field] !== recipe[field]) {
+      const snapshot = { ...draft, [field]: draft[field] };
+      saveQueue.current = saveQueue.current.then(() => onSave(recipe.id, snapshot));
+    }
   }
   return (
     <article className="recipe-card">
