@@ -2,12 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const usersRouter = require('./routes/users');
+const recipesRouter = require('./routes/recipes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use('/api', usersRouter);
+app.use('/api', recipesRouter);
 
 app.get('/', (req, res) => res.send('Hello from CodeBox!'));
 app.get('/app', (req, res) => res.redirect('/login'));
