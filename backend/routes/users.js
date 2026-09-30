@@ -1,6 +1,7 @@
 const express = require('express');
 const userService = require('../services/userService');
 const { OAuth2Client } = require('google-auth-library');
+const { setAuthCookie, clearAuthCookie } = require('../middleware/auth');
 
 const googleClient = process.env.GOOGLE_CLIENT_ID
   ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
@@ -26,7 +27,9 @@ async function login(req, res, next) {
     const user = await userService.findUserByUsername(username);
     const passwordIsValid = user && await userService.verifyPassword(password, user.password_hash);
     if (!passwordIsValid) return res.status(401).json({ error: 'Invalid username or password' });
-    res.status(200).json({ user: userService.publicUser(user) });
+    const publicUser = userService.publicUser(user);
+    setAuthCookie(res, publicUser.id);
+    res.status(200).json({ user: publicUser });
   } catch (error) { next(error); }
 }
 
@@ -36,7 +39,9 @@ async function register(req, res, next) {
     if (!username?.trim() || !password) return res.status(400).json({ error: 'Username and password are required' });
     if (password !== passwordConfirmation) return res.status(400).json({ error: 'Passwords do not match' });
     if (await userService.findUserByUsername(username)) return res.status(409).json({ error: 'Username already exists' });
-    res.status(201).json({ user: await userService.createUser(username, password) });
+    const publicUser = await userService.createUser(username, password);
+    setAuthCookie(res, publicUser.id);
+    res.status(201).json({ user: publicUser });
   } catch (error) {
     if (error.code === '23505') return res.status(409).json({ error: 'Username already exists' });
     next(error);
@@ -61,6 +66,7 @@ async function googleLogin(req, res, next) {
 
     const payload = ticket.getPayload();
     const user = await userService.findOrCreateGoogleUser(payload);
+    setAuthCookie(res, user.id);
     res.status(200).json({ user });
   } catch (error) {
     next(error);
@@ -72,5 +78,6 @@ router.get('/users/:id', getUser);
 router.post('/login', login);
 router.post('/register', register);
 router.post('/auth/google', googleLogin);
+router.post('/logout', (req, res) => { clearAuthCookie(res); res.status(200).json({ message: 'Logged out' }); });
 
 module.exports = router;

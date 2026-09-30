@@ -27,10 +27,13 @@ export default function LoginPage() {
 
   async function submit(event) {
     event.preventDefault(); setError(''); setLoading(true);
-    const response = await fetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
-    const result = await response.json(); setLoading(false);
-    if (!response.ok) { setError(result.error); return; }
-    storeUser(result.user); window.location.href = '/home';
+    try {
+      const response = await fetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      const result = await response.json();
+      if (!response.ok) { setError(result.error); return; }
+      storeUser(result.user); window.location.href = '/home';
+    } catch { setError('Could not connect to the server.'); }
+    finally { setLoading(false); }
   }
 
   function toggleMode() { setMode(isLogin ? 'register' : 'login'); setForm(initialForm); setError(''); }
@@ -50,15 +53,18 @@ export default function LoginPage() {
 
   async function handleGoogleCredential({ credential }) {
     setError(''); setLoading(true);
-    const response = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
-    const result = await response.json(); setLoading(false);
-    if (!response.ok) { setError(result.error); return; }
-    storeUser(result.user); window.location.href = '/home';
+    try {
+      const response = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
+      const result = await response.json();
+      if (!response.ok) { setError(result.error); return; }
+      storeUser(result.user); window.location.href = '/home';
+    } catch { setError('Could not connect to the server.'); }
+    finally { setLoading(false); }
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6 py-12">
-      <section className="aurora-card w-full max-w-md p-8 sm:p-10">
+    <main className="login-page flex min-h-screen items-center justify-center px-6 py-12">
+      <section className="login-card w-full max-w-md p-8 sm:p-10">
         <p className="eyebrow">CodeBox Kitchen</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">Welcome back.</h1>
         <p className="mt-3 text-slate-400">{isLogin ? 'Sign in to continue to your recipe journal.' : 'Create an account to start saving recipes.'}</p>

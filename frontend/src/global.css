@@ -1,3 +1,40 @@
 @tailwind base; @tailwind components; @tailwind utilities;
 @layer base { body { @apply bg-slate-950 text-white antialiased; font-family: Inter, ui-sans-serif, system-ui, sans-serif; } }
 @layer components { .aurora-card { @apply rounded-3xl border border-white/10 bg-white/[0.06] shadow-2xl shadow-cyan-950/40 backdrop-blur-xl; } .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300; } .field { @apply w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70 focus:ring-2 focus:ring-cyan-300/20; } .primary-button { @apply w-full rounded-xl bg-cyan-300 px-4 py-3 font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-wait disabled:opacity-60; } }
+
+.recipe-page { min-height: 100vh; padding: 3rem clamp(1.25rem, 5vw, 5rem); background: #f5f1e8; color: #1e293b; }
+.recipe-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; max-width: 1200px; margin: 0 auto 2.5rem; }
+.recipe-header h1 { margin-top: .5rem; color: #1e293b; font-family: Georgia, serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 500; letter-spacing: -.04em; }
+.welcome { margin-top: .35rem; color: #64748b; }
+.sign-out-button { border: 1px solid #94a3b8; border-radius: 999px; padding: .55rem 1rem; color: #475569; font-size: .875rem; transition: background .2s, color .2s; }
+.sign-out-button:hover { background: #1e293b; color: #fff; }
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; align-items: stretch; }
+.recipe-card, .add-recipe-card { min-height: 430px; border: 2px solid #334155; border-radius: 1.25rem; background: rgba(255, 255, 255, .28); padding: 1.15rem; box-shadow: 5px 6px 0 rgba(51, 65, 85, .12); }
+.recipe-card { display: flex; flex-direction: column; gap: .8rem; }
+.recipe-title { border: 0; border-bottom: 1px solid #94a3b8; background: transparent; padding: .2rem .15rem .65rem; color: #1e293b; font-family: Georgia, serif; font-size: 1.35rem; outline: none; }
+.recipe-title:focus, .recipe-field textarea:focus { border-color: #0f766e; box-shadow: 0 1px 0 #0f766e; }
+.recipe-field { display: flex; flex: 1; flex-direction: column; gap: .35rem; min-height: 0; }
+.recipe-field span { color: #64748b; font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.recipe-field textarea { width: 100%; flex: 1; resize: vertical; border: 1px solid #cbd5e1; border-radius: .6rem; background: rgba(255, 255, 255, .45); padding: .7rem; color: #334155; font: inherit; line-height: 1.45; outline: none; }
+.delete-button { align-self: flex-end; border: 0; color: #b91c1c; font-size: .8rem; font-weight: 700; }
+.delete-button:hover { text-decoration: underline; }
+.add-recipe-card { display: flex; min-height: 430px; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; border-style: dashed; color: #475569; transition: background .2s, transform .2s; }
+.add-recipe-card:hover { background: rgba(255, 255, 255, .62); transform: translateY(-2px); }
+.add-recipe-card span { font-size: 4rem; font-weight: 200; line-height: 1; }
+.recipe-status, .recipe-error { max-width: 1200px; margin: 2rem auto; color: #64748b; }
+.recipe-error { color: #b91c1c; }
+
+.recipe-page, .login-page { background: #f5f1e8; }
+.eyebrow { color: #0f766e; }
+.login-card { border: 2px solid #334155; border-radius: 1.25rem; background: rgba(255, 255, 255, .45); color: #1e293b; box-shadow: 5px 6px 0 rgba(51, 65, 85, .12); }
+.login-card h1 { color: #1e293b; font-family: Georgia, serif; }
+.login-card p { color: #64748b; }
+.login-card .field { border-color: #cbd5e1; background: rgba(255, 255, 255, .5); color: #334155; }
+.login-card .field::placeholder { color: #94a3b8; }
+.login-card .field:focus { border-color: #0f766e; box-shadow: 0 0 0 2px rgba(15, 118, 110, .16); }
+.login-card .primary-button { background: #0f766e; color: #fff; }
+.login-card .primary-button:hover { background: #115e59; }
+.login-card .text-rose-300 { color: #b91c1c; }
+.login-card .text-slate-500 { color: #94a3b8; }
+.login-card .text-slate-400 { color: #64748b; }
+.login-card .text-slate-400:hover { color: #0f766e; }
