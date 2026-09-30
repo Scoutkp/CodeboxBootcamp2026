@@ -57,8 +57,8 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6 py-12">
-      <section className="aurora-card w-full max-w-md p-8 sm:p-10">
+    <main className="login-page flex min-h-screen items-center justify-center px-6 py-12">
+      <section className="login-card w-full max-w-md p-8 sm:p-10">
         <p className="eyebrow">CodeBox Kitchen</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">Welcome back.</h1>
         <p className="mt-3 text-slate-400">{isLogin ? 'Sign in to continue to your recipe journal.' : 'Create an account to start saving recipes.'}</p>

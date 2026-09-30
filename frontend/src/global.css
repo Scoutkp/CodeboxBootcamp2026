@@ -23,3 +23,18 @@
 .add-recipe-card span { font-size: 4rem; font-weight: 200; line-height: 1; }
 .recipe-status, .recipe-error { max-width: 1200px; margin: 2rem auto; color: #64748b; }
 .recipe-error { color: #b91c1c; }
+
+.recipe-page, .login-page { background: #f5f1e8; }
+.eyebrow { color: #0f766e; }
+.login-card { border: 2px solid #334155; border-radius: 1.25rem; background: rgba(255, 255, 255, .45); color: #1e293b; box-shadow: 5px 6px 0 rgba(51, 65, 85, .12); }
+.login-card h1 { color: #1e293b; font-family: Georgia, serif; }
+.login-card p { color: #64748b; }
+.login-card .field { border-color: #cbd5e1; background: rgba(255, 255, 255, .5); color: #334155; }
+.login-card .field::placeholder { color: #94a3b8; }
+.login-card .field:focus { border-color: #0f766e; box-shadow: 0 0 0 2px rgba(15, 118, 110, .16); }
+.login-card .primary-button { background: #0f766e; color: #fff; }
+.login-card .primary-button:hover { background: #115e59; }
+.login-card .text-rose-300 { color: #b91c1c; }
+.login-card .text-slate-500 { color: #94a3b8; }
+.login-card .text-slate-400 { color: #64748b; }
+.login-card .text-slate-400:hover { color: #0f766e; }
