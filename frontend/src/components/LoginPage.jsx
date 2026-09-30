@@ -32,7 +32,7 @@ export default function LoginPage() {
       const response = await apiFetch(isLogin ? '/api/login' : '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
       const result = await response.json();
       if (!response.ok) { setError(result.error); return; }
-      storeUser(result.user); window.location.href = '/home';
+      storeUser(result.user, result.token); window.location.href = '/home';
     } catch { setError('Could not connect to the server.'); }
     finally { setLoading(false); }
   }
@@ -58,7 +58,7 @@ export default function LoginPage() {
       const response = await apiFetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential }) });
       const result = await response.json();
       if (!response.ok) { setError(result.error); return; }
-      storeUser(result.user); window.location.href = '/home';
+      storeUser(result.user, result.token); window.location.href = '/home';
     } catch { setError('Could not connect to the server.'); }
     finally { setLoading(false); }
   }
